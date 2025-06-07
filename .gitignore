@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+*.egg-info/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# IDE/OS-specific
+.idea/
+.vscode/
+.DS_Store 

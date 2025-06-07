@@ -1,0 +1,16 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  backend:
+    # ./backend ディレクトリにあるDockerfileを使用してイメージをビルド
+    build: ./backend
+    # ホストPCの5001番ポートをコンテナの5000番ポートにマッピング
+    ports:
+      - "5001:5000"
+    # ホストのbackendディレクトリをコンテナの/appにマウントし、コードの変更を即時反映
+    volumes:
+      - ./backend:/app
+    # プロジェクトルートにある.envファイルから環境変数を読み込む
+    env_file:
+      - .env 
