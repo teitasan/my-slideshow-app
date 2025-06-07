@@ -1,5 +1,4 @@
 # backend/requirements.txt
 flask
 python-dotenv
-google-generativeai
-requests 
+google-generativeai 

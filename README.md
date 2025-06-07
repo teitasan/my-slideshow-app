@@ -1,23 +1,22 @@
-# 🎬 AI Slideshow Maker
+# 🎬 AI AA Slideshow Maker
 
-AIが入力されたテキストを2人の登場人物（AさんとBさん）による会話形式のシナリオに変換し、各セリフに対応する画像を生成して、音声付きスライドショーを作成するWebアプリケーションです。
+AIが入力されたテキストを2人の登場人物（AさんとBさん）による会話形式のシナリオに変換し、各セリフに対応するアスキーアート（AA）を生成して、音声付きスライドショーを作成するWebアプリケーションです。
 
 ## ✨ 主な機能
 
 - **テキスト→会話変換**: Google Gemini AIが入力テキストを自然な会話形式に変換
-- **AI画像生成**: Leonardo.Ai APIが各セリフに適した画像を自動生成
+- **AA生成**: AIが各セリフに適したアスキーアート（AA）を自動生成
 - **音声付きスライドショー**: Web Speech APIによる日本語音声読み上げ
 - **美しいUI**: モダンで使いやすいWebインターフェース
 - **Docker対応**: 簡単なセットアップと環境構築
+- **複数AAスタイル**: ゆっくり、2ch、デフォルトなど複数のAAスタイルに対応
 
 ## 🛠 技術スタック
 
 - **コンテナ**: Docker, Docker Compose
 - **バックエンド**: Python 3.11, Flask
 - **フロントエンド**: HTML5, CSS3, JavaScript (ES6+)
-- **AI API**: 
-  - Google Gemini API (gemini-1.5-flash) - 会話生成
-  - Leonardo.Ai API - 画像生成
+- **AI API**: Google Gemini API (gemini-1.5-flash) - 会話生成とAA生成
 - **ブラウザAPI**: Web Speech API - 音声合成
 
 ## 📁 プロジェクト構造
@@ -35,8 +34,9 @@ my-slideshow-app/
     ├── app.py             # メインアプリケーション
     ├── prompts/           # AIプロンプト管理
     │   ├── conversation_generation.md     # 会話生成用プロンプト
-    │   ├── image_prompt_generation.md     # 画像プロンプト生成用
-    │   └── aa_generation.md              # AA生成用プロンプト
+    │   ├── aa_generation_default.md       # デフォルトAA生成用プロンプト
+    │   ├── aa_generation_yukkuri.md       # ゆっくりAA生成用プロンプト
+    │   └── aa_generation_2ch.md           # 2chAA生成用プロンプト
     └── templates/
         └── index.html      # フロントエンドUI
 ```
@@ -52,20 +52,12 @@ my-slideshow-app/
 
 ### 1. APIキーの取得
 
-このアプリケーションを使用するには、以下のAPIキーが必要です：
+このアプリケーションを使用するには、Google Gemini APIキーが必要です：
 
 #### Google Gemini API（必須）
 1. [Google AI Studio](https://makersuite.google.com/app/apikey)にアクセス
 2. Googleアカウントでログイン
 3. 「Create API Key」をクリック
-4. 生成されたAPIキーをコピー
-
-#### Leonardo.Ai API（画像生成モード使用時のみ必要）
-**注意**: モックモード（AA生成）のみを使用する場合は、このAPIキーは不要です。
-
-1. [Leonardo.Ai](https://leonardo.ai/)でアカウント作成
-2. ダッシュボードにログイン
-3. API設定画面でAPIキーを生成
 4. 生成されたAPIキーをコピー
 
 ### 2. 環境変数の設定
@@ -85,13 +77,9 @@ cp .env.example .env
 ```bash
 # .env ファイルの内容
 GEMINI_API_KEY=your_actual_gemini_api_key_here
-# LEONARDO_API_KEY=your_actual_leonardo_api_key_here  # 画像生成モード使用時のみ必要
 ```
 
-**注意**: 
-- `your_actual_gemini_api_key_here` の部分を、取得した実際のGemini APIキーに置き換えてください。
-- Leonardo.Ai APIキーは、モックモード（AA生成）のみを使用する場合は設定不要です。
-- 画像生成モードも使用したい場合は、`#` を削除してLeonardo.Ai APIキーを設定してください。
+**注意**: `your_actual_gemini_api_key_here` の部分を、取得した実際のGemini APIキーに置き換えてください。
 
 ### 3. アプリケーションの起動
 
@@ -114,9 +102,18 @@ http://localhost:5001
 ## 📝 使用方法
 
 1. **テキスト入力**: テキストエリアに物語や説明文を入力
-2. **生成開始**: 「スライドショーを生成」ボタンをクリック
-3. **AI処理**: AIが会話形式のシナリオと対応画像を生成（数分かかる場合があります）
-4. **スライドショー再生**: 自動的に音声付きスライドショーが再生されます
+2. **AAスタイル選択**: お好みのAAスタイル（デフォルト、ゆっくり、2ch）を選択
+3. **生成開始**: 「スライドショーを生成」ボタンをクリック
+4. **AI処理**: AIが会話形式のシナリオと対応AAを生成（数分かかる場合があります）
+5. **スライドショー再生**: 自動的に音声付きAAスライドショーが再生されます
+
+## 🎨 AAスタイルについて
+
+- **default**: 基本的なアスキーアート
+- **yukkuri**: ゆっくり系のキャラクター表現
+- **2ch**: 2ちゃんねる風のAA表現
+
+各スタイルは専用のプロンプトで最適化されており、異なる表現スタイルのAAを楽しめます。
 
 ## 🔧 開発・デバッグ
 
@@ -149,8 +146,7 @@ docker-compose down -v
 AIに送信するプロンプトは、`backend/prompts/`ディレクトリで管理されています：
 
 - **`conversation_generation.md`**: テキストから会話形式への変換プロンプト
-- **`image_prompt_generation.md`**: 日本語セリフから英語画像プロンプトへの変換
-- **`aa_generation.md`**: セリフからアスキーアート生成用プロンプト
+- **`aa_generation_*.md`**: 各スタイルのAA生成用プロンプト
 
 プロンプトを調整したい場合は、これらのMarkdownファイルを編集してからDockerコンテナを再起動してください：
 
@@ -172,8 +168,8 @@ docker-compose restart backend
    - Dockerが起動しているか確認
    - ポート5001が他のアプリケーションで使用されていないか確認
 
-3. **画像生成の失敗**
-   - Leonardo.Ai APIの利用制限に達していないか確認
+3. **AA生成の失敗**
+   - Gemini APIの利用制限に達していないか確認
    - ネットワーク接続を確認
 
 4. **音声が再生されない**
@@ -200,4 +196,4 @@ docker-compose restart backend
 
 ---
 
-**楽しいスライドショー作成をお楽しみください！** 🎉 
+**楽しいAAスライドショー作成をお楽しみください！** 🎉 
