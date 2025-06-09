@@ -12,4 +12,48 @@ docker-compose.override.yml
 # IDE/OS-specific
 .idea/
 .vscode/
-.DS_Store 
+.DS_Store
+
+# Static files (audio, images, videos)
+backend/static/
+static/
+uploads/
+downloads/
+
+# Authentication and secrets
+*.json
+*.key
+*.pem
+*.crt
+secrets/
+config/*.json
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.cache
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Node.js (if using frontend)
+node_modules/
+dist/
+build/
+
+# OS generated files
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup 
